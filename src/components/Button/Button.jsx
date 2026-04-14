@@ -2,7 +2,7 @@ import './Button.css'
 
 function Button(){
     return (
-        <button className='button accent'>Сохранить</button>
+        <button className='button'>Искать</button>
     )
 }
 export default Button;
