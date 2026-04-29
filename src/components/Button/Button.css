@@ -1,6 +1,6 @@
 .button {
-    cursor: pointer;
-    width: max-content;
+cursor: pointer;
+width: max-content;
 font-weight: 400;
 font-size: 16px;
 line-height: 150%;
@@ -14,5 +14,11 @@ transition: opacity 0.25s;
 }
 
 .button:hover {
-    opacity: 0.75;
+opacity: 0.75;
+}
+
+.menu-button {
+font-weight: 600;
+padding: 16px;
+background: none;
 }
