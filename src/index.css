@@ -1,4 +1,9 @@
 body {
     background: #121829;
     font-family: "Poppins", sans-serif;
+    margin: 0px;
+}
+
+h1, p {
+    margin: 0px;
 }
