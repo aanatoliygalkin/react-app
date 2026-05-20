@@ -5,7 +5,7 @@ function Button({className, text}){
     const cl = 'button' + (className ? ' '+ className : '');
 
     const onClick = () => {
-    console.log('Клик');
+    console.log('Клик 2');
     } 
 
     return (
