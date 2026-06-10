@@ -1,9 +1,9 @@
-import './Text.css'
+import styles from './Text.module.css'
 
 function Text(){
 return(
     <>
-    <p className='text'>Введите название фильма, сериала или мультфильма для поиска и добавления в избранное.</p>
+    <p className={styles['text']}>Введите название фильма, сериала или мультфильма для поиска и добавления в избранное.</p>
     </>
 )
 }

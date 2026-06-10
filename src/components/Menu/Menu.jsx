@@ -1,9 +1,9 @@
-import './Menu.css'
+import styles from './Menu.module.css'
 
 function Menu( {children} ){
 return(
     <>
-    <div className='menu'>
+    <div className={styles['menu']}>
         {children}
     </div>
     </>

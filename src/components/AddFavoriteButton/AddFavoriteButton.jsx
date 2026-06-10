@@ -1,9 +1,9 @@
-import './AddFavoriteButton.css'
+import styles from './AddFavoriteButton.module.css'
 
 function AddFavoriteButton(){
 return(
     <>
-    <button className='add-favorite-button'>В избранное</button>
+    <button className={styles['add-favorite-button']}>В избранное</button>
     </>
 )
 }

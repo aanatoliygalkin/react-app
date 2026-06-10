@@ -1,8 +1,8 @@
-import './Search.css'
+import styles from './Search.module.css'
 
 function Search({ children }){
 return(
-    <div className='search'>
+    <div className={styles['search']}>
     {children}
     </div>
 )

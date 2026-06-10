@@ -1,8 +1,8 @@
-import './MovieList.css'
+import styles from './MovieList.module.css'
 
 function MovieList( {children} ){
 return(
-    <div className='movie-list'>
+    <div className={styles['movie-list']}>
     {children}
     </div>
 )

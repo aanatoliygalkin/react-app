@@ -1,10 +1,10 @@
-import './SearchInput.css'
+import styles from './SearchInput.module.css'
 
 function SearchInput() {
     return (
-        <div className='search-input'>
+        <div className={styles['search-input']}>
             <img src='/src/assets/search.svg' alt="" />
-            <input className='search-input-input' type="text" placeholder='Введите название' />
+            <input className={styles['search-input-input']} type="text" placeholder='Введите название' />
         </div>
     )
 }

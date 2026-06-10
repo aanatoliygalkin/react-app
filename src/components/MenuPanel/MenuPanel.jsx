@@ -1,9 +1,9 @@
-import './MenuPanel.css'
+import styles from './MenuPanel.module.css'
 
 function MenuPanel({ children }) {
 
     return (
-        <div className='menu-panel'>
+        <div className={styles['menu-panel']}>
             {children}
         </div>
     )
