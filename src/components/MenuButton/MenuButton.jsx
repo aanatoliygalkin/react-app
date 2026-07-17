@@ -1,10 +1,10 @@
 import styles from './MenuButton.module.css'
 import Button from '../Button/Button'
 
-function MenuButton({text}){
+function MenuButton({text, onClick}){
 
     return (
-        <Button text={text} className={styles['menu-button']}/>
+        <Button onClick={onClick} text={text} className={styles['menu-button']}/>
     )
 }
 export default MenuButton;
