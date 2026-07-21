@@ -1,9 +1,9 @@
-import './Header.css'
+import styles from './Header.module.css'
 
-function Header(){
+function Header({ title }){
 return(
     <>
-    <h1 className='header'>Поиск</h1>
+    <h1 className={styles['header']}>{title}</h1>
     </>
 )
 }

@@ -1,15 +1,10 @@
-import './Button.css'
+import styles from './Button.module.css'
+import cn from 'classnames';
 
-function Button({className, text}){
-
-    const cl = 'button' + (className ? ' '+ className : '');
-
-    const onClick = () => {
-    console.log('Клик');
-    } 
+function Button({className, text, disabled=false, onClick}){
 
     return (
-        <button onClick={onClick} className={cl}>{text}</button>
+        <button onClick={onClick} disabled={disabled} className={cn(styles['button'], className)}>{text}</button>
     )
 }
 export default Button;

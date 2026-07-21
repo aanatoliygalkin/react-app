@@ -1,11 +1,18 @@
-import './Search.css'
+import classNames from 'classnames';
+import styles from './Search.module.css'
 
-function Search({ children }){
-return(
-    <div className='search'>
-    {children}
-    </div>
-)
+function Search({ children, column }) {
+    const classes = classNames(
+        styles['search'],
+        {
+            [styles['column']]: column
+        }
+    );  
+    return (
+        <div className={classes}>
+            {children}
+        </div>
+    )
 }
 
 export default Search
