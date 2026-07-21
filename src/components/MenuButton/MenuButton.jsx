@@ -1,5 +1,7 @@
 import styles from './MenuButton.module.css'
 import Button from '../Button/Button'
+import { useContext } from 'react';
+import { UserContext } from '../../user.context';
 
 function MenuButton({text, onClick}){
 

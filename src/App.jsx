@@ -9,11 +9,12 @@ import MenuButton from './components/MenuButton/MenuButton.jsx'
 import MovieList from './components/MovieList/MovieList.jsx'
 import MovieItem from './components/MovieItem/MovieItem.jsx'
 import MainInput from './components/MainInput/MainInput.jsx'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { UserContext } from './user.context.jsx'
 
 function App() {
 
-  const movieData = [
+/*   const movieData = [
     {
       title: 'Black Widow',
       image: 'image1',
@@ -54,67 +55,13 @@ function App() {
       image: 'image8',
       rating: '456'
     },
-  ]
+  ] */
 
-  const [user, setUser] = useState({ name: '', isLogined: false });
-  const [inputName, setInputName] = useState('');
-
-  useEffect(() => {
-    const res = localStorage.getItem('users');
-    if (res) {
-      const users = JSON.parse(res);
-      const loggedUser = users.find(user => user.isLogined === true);
-      if (loggedUser)
-        setUser(loggedUser);
-      setInputName('');
-    }
-
-  }, [])
-
-  const loginUser = (e) => {
-    e.preventDefault();
-    const res = localStorage.getItem('users');
-    const usersArray = res ? JSON.parse(res) : [];
-    const existingUser = usersArray.find(u => u.name === inputName);
-    if (existingUser) {
-      const updateUsers = usersArray.map((u) => {
-        return {
-          ...u,
-          isLogined: u.name === inputName
-        };
-      })
-      setUser(updateUsers.find(u => u.isLogined === true));
-      localStorage.setItem('users', JSON.stringify(updateUsers));
-    } else {
-      setUser({ name: inputName, isLogined: true });
-      const updateUsers = usersArray.map((u) => {
-        return {
-          ...u,
-          isLogined: false,
-        };
-      })
-      updateUsers.push({ name: inputName, isLogined: true });
-      localStorage.setItem('users', JSON.stringify(updateUsers));
-    }
-    setInputName('');
-  }
-
-  const logoutUser = () => {
-    const res = localStorage.getItem('users');
-    const usersArray = res ? JSON.parse(res) : [];
-    const removeUsers = usersArray.map((u) => {
-      return {
-        ...u,
-        isLogined: false,
-      }
-    })
-    setUser({ name: user.name, isLogined: false });
-    localStorage.setItem('users', JSON.stringify(removeUsers));
-  }
-
+  const movieData = []
+  const { user, inputName, setInputName, loginUser, logoutUser } = useContext(UserContext);
 
   return (
-    <>
+<>
       <Menu>
         <MenuPanel>
           <MenuButton text='Поиск фильмов' />
@@ -149,7 +96,7 @@ function App() {
           <Button disabled={inputName === ''} type='submit' text='Войти в профиль' />
         </Search>
       </form>
-    </>
+      </>
   )
 }
 
