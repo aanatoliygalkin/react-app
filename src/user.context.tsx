@@ -1,18 +1,32 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, ReactNode } from 'react'
 
-export const UserContext = createContext({
-name: '',
-isLogined: false
-})
+export interface UserContextProviderProps {
+  children: ReactNode;
+}
 
-export const UserContextProvider = ({children}) => {
-const [user, setUser] = useState({ name: '', isLogined: false });
+export interface UserContextType {
+  user: UserProps
+  inputName: string
+  setInputName: React.Dispatch<React.SetStateAction<string>>
+  loginUser: (e: React.FormEvent<HTMLFormElement>) => void
+  logoutUser: () => void
+}
+
+export const UserContext = createContext<UserContextType | undefined>(undefined)
+
+export interface UserProps {
+  name: string;
+  isLogined: boolean;
+}
+
+export const UserContextProvider = ({children}: UserContextProviderProps) => {
+const [user, setUser] = useState<UserProps>({ name: '', isLogined: false });
 const [inputName, setInputName] = useState('');
 
 useEffect(() => {
     const res = localStorage.getItem('users');
     if (res) {
-      const users = JSON.parse(res);
+      const users: UserProps[] = JSON.parse(res);
       const loggedUser = users.find(user => user.isLogined === true);
       if (loggedUser)
         setUser(loggedUser);
@@ -21,23 +35,23 @@ useEffect(() => {
 
   }, [])
 
-  const loginUser = (e) => {
+  const loginUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = localStorage.getItem('users');
     const usersArray = res ? JSON.parse(res) : [];
-    const existingUser = usersArray.find(u => u.name === inputName);
+    const existingUser = usersArray.find((u: UserProps) => u.name === inputName);
     if (existingUser) {
-      const updateUsers = usersArray.map((u) => {
+      const updateUsers = usersArray.map((u: UserProps) => {
         return {
           ...u,
           isLogined: u.name === inputName
         };
       })
-      setUser(updateUsers.find(u => u.isLogined === true));
+      setUser(updateUsers.find((u: UserProps) => u.isLogined === true));
       localStorage.setItem('users', JSON.stringify(updateUsers));
     } else {
       setUser({ name: inputName, isLogined: true });
-      const updateUsers = usersArray.map((u) => {
+      const updateUsers = usersArray.map((u: UserProps) => {
         return {
           ...u,
           isLogined: false,
@@ -52,7 +66,7 @@ useEffect(() => {
   const logoutUser = () => {
     const res = localStorage.getItem('users');
     const usersArray = res ? JSON.parse(res) : [];
-    const removeUsers = usersArray.map((u) => {
+    const removeUsers = usersArray.map((u: UserProps) => {
       return {
         ...u,
         isLogined: false,

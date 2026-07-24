@@ -1,7 +1,13 @@
 import classNames from 'classnames';
 import styles from './Search.module.css'
+import { ReactNode } from 'react';
 
-function Search({ children, column }) {
+interface SearchProps {
+    children: ReactNode;
+    column?: boolean;
+}
+
+function Search({ children, column }: SearchProps) {
     const classes = classNames(
         styles['search'],
         {

@@ -1,6 +1,11 @@
+import { ReactNode } from 'react'
 import styles from './Menu.module.css'
 
-function Menu( {children} ){
+interface MenuProps {
+    children: ReactNode;
+}
+
+function Menu( {children}: MenuProps ){
 return(
     <>
     <div className={styles['menu']}>

@@ -1,7 +1,8 @@
 import AddFavoriteButton from '../AddFavoriteButton/AddFavoriteButton'
 import styles from './MovieItem.module.css'
+import { MovieItemProps } from './MovieItem.props';
 
-function MovieItem({ title, image, rating }) {
+function MovieItem({ title, image, rating }: MovieItemProps) {
     const imageUrl = `/images/${image}.jpg`;
     return (
         <div className={styles['movie-item']}>

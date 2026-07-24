@@ -1,6 +1,10 @@
 import styles from './Header.module.css'
 
-function Header({ title }){
+interface HeaderProps {
+  title: string;
+}
+
+function Header({ title }: HeaderProps){
 return(
     <>
     <h1 className={styles['header']}>{title}</h1>

@@ -1,20 +1,26 @@
 import './App.css'
-import Header from './components/Header/Header.jsx'
-import Text from './components/Text/Text.jsx'
-import Button from './components/Button/Button.jsx'
-import Search from './components/Search/Search.jsx'
-import Menu from './components/Menu/Menu.jsx'
-import MenuPanel from './components/MenuPanel/MenuPanel.jsx'
-import MenuButton from './components/MenuButton/MenuButton.jsx'
-import MovieList from './components/MovieList/MovieList.jsx'
-import MovieItem from './components/MovieItem/MovieItem.jsx'
-import MainInput from './components/MainInput/MainInput.jsx'
-import { useEffect, useState, useContext } from 'react'
-import { UserContext } from './user.context.jsx'
+import Header from './components/Header/Header.js'
+import Text from './components/Text/Text.js'
+import Button from './components/Button/Button.js'
+import Search from './components/Search/Search.js'
+import Menu from './components/Menu/Menu.js'
+import MenuPanel from './components/MenuPanel/MenuPanel.js'
+import MenuButton from './components/MenuButton/MenuButton.js'
+import MovieList from './components/MovieList/MovieList.js'
+import MovieItem from './components/MovieItem/MovieItem.js'
+import MainInput from './components/MainInput/MainInput.js'
+import { useContext } from 'react'
+import { UserContext } from './user.context'
+
+interface MovieProps {
+    title: string;
+  image: string;
+  rating: string;
+}
 
 function App() {
 
-/*   const movieData = [
+  const movieData = [
     {
       title: 'Black Widow',
       image: 'image1',
@@ -55,10 +61,9 @@ function App() {
       image: 'image8',
       rating: '456'
     },
-  ] */
+  ] 
 
-  const movieData = []
-  const { user, inputName, setInputName, loginUser, logoutUser } = useContext(UserContext);
+  const { user, inputName, setInputName, loginUser, logoutUser } = useContext(UserContext)!;
 
   return (
 <>
@@ -92,7 +97,7 @@ function App() {
       <Header title={'Вход'} />
       <form onSubmit={loginUser} action="">
         <Search column={true}>
-          <MainInput value={inputName} onChange={(e) => setInputName(e.target.value)} margin='27px 0px 27px 0px' placeholder={'Ваше имя'} />
+          <MainInput value={inputName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputName(e.target.value)} margin='27px 0px 27px 0px' placeholder={'Ваше имя'} />
           <Button disabled={inputName === ''} type='submit' text='Войти в профиль' />
         </Search>
       </form>
