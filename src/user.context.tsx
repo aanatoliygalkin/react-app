@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export interface UserContextProviderProps {
   children: ReactNode;
@@ -20,6 +21,7 @@ export interface UserProps {
 }
 
 export const UserContextProvider = ({children}: UserContextProviderProps) => {
+const navigate = useNavigate();
 const [user, setUser] = useState<UserProps>({ name: '', isLogined: false });
 const [inputName, setInputName] = useState('');
 
@@ -49,6 +51,8 @@ useEffect(() => {
       })
       setUser(updateUsers.find((u: UserProps) => u.isLogined === true));
       localStorage.setItem('users', JSON.stringify(updateUsers));
+      localStorage.setItem('jwt', 'jwt');
+      navigate('/');
     } else {
       setUser({ name: inputName, isLogined: true });
       const updateUsers = usersArray.map((u: UserProps) => {
@@ -59,6 +63,8 @@ useEffect(() => {
       })
       updateUsers.push({ name: inputName, isLogined: true });
       localStorage.setItem('users', JSON.stringify(updateUsers));
+      localStorage.setItem('jwt', 'jwt');
+      navigate('/');
     }
     setInputName('');
   }
@@ -74,6 +80,8 @@ useEffect(() => {
     })
     setUser({ name: user.name, isLogined: false });
     localStorage.setItem('users', JSON.stringify(removeUsers));
+    localStorage.removeItem('jwt');
+    navigate('/login');
   }
 
 return(

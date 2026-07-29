@@ -8,15 +8,18 @@ import LoginPage from './pages/LoginPage/LoginPage'
 import SearchMovies from './pages/SearchMovies/SearchMovies'
 import FavoritesPage from './pages/FavoritesPage/FavoritesPage'
 import MoviePage from './pages/MoviePage/MoviePage'
+import axios from 'axios'
+import { PREFIX } from './helpers/PREFIX'
+import { RequireAuth } from './helpers/RequireAuth'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <UserContextProvider><Layout /></UserContextProvider>,
     children: [
       {
         path: '/',
-        element: <SearchMovies />
+        element: <RequireAuth><SearchMovies /></RequireAuth>
       },
       {
         path: '/login',
@@ -24,11 +27,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/favorites',
-        element: <FavoritesPage />
+        element: <RequireAuth><FavoritesPage /></RequireAuth>
       },
       {
         path: '/movie/:id',
-        element: <MoviePage />
+        element: <RequireAuth><MoviePage /></RequireAuth>,
+        errorElement: <>Ошибка</>,
+        loader: async ({ params }) => {
+          const { data } = await axios.get(`${PREFIX}/?tt=${params.id}`);
+          return data;
+        }
       }
     ]
   }
@@ -41,9 +49,7 @@ if (!rootElement) {
 }
 
 createRoot(rootElement).render(
-  <UserContextProvider>
     <StrictMode>
       <RouterProvider router={router} />
     </StrictMode>
-  </UserContextProvider>
 )
