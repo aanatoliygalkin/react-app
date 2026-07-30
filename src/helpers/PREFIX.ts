@@ -1,1 +1,1 @@
-export const PREFIX = 'https://search.imdbot.workers.dev';
+export const PREFIX = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/';

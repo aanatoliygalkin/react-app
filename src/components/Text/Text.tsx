@@ -1,9 +1,16 @@
+import { ReactNode } from 'react'
 import styles from './Text.module.css'
+import cn from 'classnames';
 
-function Text(){
+export interface Text {
+    children: ReactNode;
+    align: string;
+}
+
+function Text({children, align='left'}: Text){
 return(
     <>
-    <p className={styles['text']}>Введите название фильма, сериала или мультфильма для поиска и добавления в избранное.</p>
+    <p className={cn(styles['text'], styles[align])}>{children}</p>
     </>
 )
 }

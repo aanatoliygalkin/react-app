@@ -34,7 +34,13 @@ const router = createBrowserRouter([
         element: <RequireAuth><MoviePage /></RequireAuth>,
         errorElement: <>Ошибка</>,
         loader: async ({ params }) => {
-          const { data } = await axios.get(`${PREFIX}/?tt=${params.id}`);
+          const { data } = await axios.get(`${PREFIX}${params.id}`,
+            {
+              headers: {
+                'X-API-KEY': 'e71384ee-c07d-4d44-9c84-6009eb0196dc'
+              }
+            }
+          );
           return data;
         }
       }
@@ -49,7 +55,7 @@ if (!rootElement) {
 }
 
 createRoot(rootElement).render(
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
 )

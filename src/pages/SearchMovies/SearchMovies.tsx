@@ -8,14 +8,30 @@ import MovieItem from '../../components/MovieItem/MovieItem.js';
 import { useState } from 'react';
 import axios from 'axios';
 import { PREFIX } from '../../helpers/PREFIX.js';
+import NoSearch from '../../components/NoSearch/NoSearch.js';
 
 function SearchMovies() {
 
     interface MovieProps {
-        id: number;
-        title: string;
-        image: string;
-        rating: string;
+        filmId: number;           // В API это filmId, не id
+        nameRu: string;           // Русское название
+        nameEn: string;           // Английское название
+        posterUrl: string;        // Постер (большой)
+        posterUrlPreview: string; // Постер (маленький)
+        rating: string;           // Рейтинг
+        year: string;             // Год выпуска
+        description?: string;     // Описание (может отсутствовать)
+        genres: { genre: string }[]; // Массив жанров
+        countries: { country: string }[]; // Массив стран
+        type: string;             // FILM, TV_SERIES, VIDEO
+        filmLength: string;       // Длительность
+    }
+
+    interface ApiResponse {
+        keyword: string;
+        pagesCount: number;
+        searchFilmsCountResult: number;
+        films: MovieProps[];
     }
 
     // const movieData = [
@@ -74,17 +90,30 @@ function SearchMovies() {
     const [value, setValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
+    const [noSearch, setNoSearch] = useState<boolean>(false);
 
     const searchMovie = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!value) {
             return;
         }
+        setNoSearch(false);
+        setMovieData([]);
         setIsLoading(true);
         try {
-            const res = await axios.get<MovieProps[]>(`${PREFIX}/?q=${value}`);
-            const { data } = res;
-            setMovieData(data);
+            const res = await axios.get<ApiResponse>(`${PREFIX}search-by-keyword?keyword=${value}`,
+                {
+                    headers: {
+                        'X-API-KEY': 'e71384ee-c07d-4d44-9c84-6009eb0196dc'
+                    }
+                }
+            );
+            const films = res.data.films;
+            if (films.length > 0) {
+                setMovieData(films);
+            } else {
+                setNoSearch(true);
+            }
         }
         catch (e) {
             console.error(e);
@@ -100,7 +129,7 @@ function SearchMovies() {
     return (
         <div>
             <Header title={'Поиск'} />
-            <Text />
+            <Text align='left'>Попробуйте изменить запрос или ввести более точное название фильма</Text>
 
             <form onSubmit={searchMovie} action="">
                 <Search>
@@ -110,16 +139,17 @@ function SearchMovies() {
                 </Search>
             </form>
             <MovieList>
-                {movieData.map((movie, index) =>
+                {movieData.map((movie) =>
                     <MovieItem
-                        key={index}
-                        id={movie.id}
-                        title={movie.title}
-                        image={movie.image}
-                        rating={movie.rating} />
+                        key={movie.filmId}
+                        id={movie.filmId}
+                        title={movie.nameRu || movie.nameEn || 'Без названия'}
+                        image={movie.posterUrlPreview || movie.posterUrl}
+                        rating={movie.rating || 'Нет рейтинга'} />
                 )}
             </MovieList>
             {error && <Header title={`ОШИБКА: ${error}`} />}
+            {noSearch && < NoSearch/>}
         </div>
     )
 }

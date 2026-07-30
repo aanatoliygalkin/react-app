@@ -10,6 +10,8 @@
     letter-spacing: 0.02em;
     color: #7b6ef6;
     padding-left: 32px;
+    margin-top: auto;
+    text-decoration: none;
 }
 
 .add-favorite-button::before {

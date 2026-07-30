@@ -3,4 +3,5 @@
     display: flex;
     gap: 24px;
     flex-wrap: wrap;
+    margin-bottom: 60px;
 }
