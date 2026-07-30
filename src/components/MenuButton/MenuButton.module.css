@@ -1,6 +1,28 @@
+.menu-button-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .menu-button.menu-button {
-color: #A8AEBF;
-font-weight: 600;
-padding: 16px;
-background: none;
+    color: #A8AEBF;
+    font-weight: 600;
+    background: none;
+}
+
+.badge {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    background-color: #7B6EF6;
+    border-radius: 100%;
 }

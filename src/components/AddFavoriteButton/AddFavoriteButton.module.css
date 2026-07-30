@@ -22,3 +22,16 @@
     left: 0px;
     background: center / contain no-repeat url('/icons/like.svg')
 }
+
+.in-favorite {
+    color: #37D8A7;
+}
+
+.in-favorite::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 0px;
+    background: center / contain no-repeat url('/icons/favorite.svg')
+}

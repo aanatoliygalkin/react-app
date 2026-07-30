@@ -11,6 +11,8 @@ import MoviePage from './pages/MoviePage/MoviePage'
 import axios from 'axios'
 import { PREFIX } from './helpers/PREFIX'
 import { RequireAuth } from './helpers/RequireAuth'
+import { Provider } from 'react-redux'
+import { store } from './store/store'
 
 const router = createBrowserRouter([
   {
@@ -32,7 +34,6 @@ const router = createBrowserRouter([
       {
         path: '/movie/:id',
         element: <RequireAuth><MoviePage /></RequireAuth>,
-        errorElement: <>Ошибка</>,
         loader: async ({ params }) => {
           const { data } = await axios.get(`${PREFIX}${params.id}`,
             {
@@ -56,6 +57,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </StrictMode>
 )

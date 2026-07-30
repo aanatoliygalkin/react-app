@@ -10,29 +10,29 @@ import axios from 'axios';
 import { PREFIX } from '../../helpers/PREFIX.js';
 import NoSearch from '../../components/NoSearch/NoSearch.js';
 
+export interface MovieProps {
+    filmId: number;           // В API это filmId, не id
+    nameRu: string;           // Русское название
+    nameEn: string;           // Английское название
+    posterUrl: string;        // Постер (большой)
+    posterUrlPreview: string; // Постер (маленький)
+    rating: string;           // Рейтинг
+    year: string;             // Год выпуска
+    description?: string;     // Описание (может отсутствовать)
+    genres: { genre: string }[]; // Массив жанров
+    countries: { country: string }[]; // Массив стран
+    type: string;             // FILM, TV_SERIES, VIDEO
+    filmLength: string;       // Длительность
+}
+
+export interface ApiResponse {
+    keyword: string;
+    pagesCount: number;
+    searchFilmsCountResult: number;
+    films: MovieProps[];
+}
+
 function SearchMovies() {
-
-    interface MovieProps {
-        filmId: number;           // В API это filmId, не id
-        nameRu: string;           // Русское название
-        nameEn: string;           // Английское название
-        posterUrl: string;        // Постер (большой)
-        posterUrlPreview: string; // Постер (маленький)
-        rating: string;           // Рейтинг
-        year: string;             // Год выпуска
-        description?: string;     // Описание (может отсутствовать)
-        genres: { genre: string }[]; // Массив жанров
-        countries: { country: string }[]; // Массив стран
-        type: string;             // FILM, TV_SERIES, VIDEO
-        filmLength: string;       // Длительность
-    }
-
-    interface ApiResponse {
-        keyword: string;
-        pagesCount: number;
-        searchFilmsCountResult: number;
-        films: MovieProps[];
-    }
 
     // const movieData = [
     //     {
@@ -109,10 +109,17 @@ function SearchMovies() {
                 }
             );
             const films = res.data.films;
-            if (films.length > 0) {
-                setMovieData(films);
+            const filteredFilms = films.filter((movie) => {
+                const hasImage = !!(movie.posterUrlPreview || movie.posterUrl);
+                const hasRating = !!(movie.rating && movie.rating !== 'null' && movie.rating !== null && movie.rating !== '0');
+                return hasImage && hasRating;
+            });
+            if (filteredFilms.length > 0) {
+                setNoSearch(false);
+                setMovieData(filteredFilms);
             } else {
                 setNoSearch(true);
+                setMovieData([]);
             }
         }
         catch (e) {
@@ -139,17 +146,18 @@ function SearchMovies() {
                 </Search>
             </form>
             <MovieList>
-                {movieData.map((movie) =>
-                    <MovieItem
-                        key={movie.filmId}
-                        id={movie.filmId}
-                        title={movie.nameRu || movie.nameEn || 'Без названия'}
-                        image={movie.posterUrlPreview || movie.posterUrl}
-                        rating={movie.rating || 'Нет рейтинга'} />
-                )}
+                {movieData
+                    .map((movie) =>
+                        <MovieItem
+                            key={movie.filmId}
+                            id={movie.filmId}
+                            title={movie.nameRu || movie.nameEn || 'Без названия'}
+                            image={movie.posterUrlPreview || movie.posterUrl}
+                            rating={movie.rating || 'Нет рейтинга'} />
+                    )}
             </MovieList>
             {error && <Header title={`ОШИБКА: ${error}`} />}
-            {noSearch && < NoSearch/>}
+            {noSearch && < NoSearch />}
         </div>
     )
 }
