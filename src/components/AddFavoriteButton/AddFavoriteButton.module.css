@@ -1,0 +1,24 @@
+.add-favorite-button {
+    position: relative;
+    cursor: pointer;
+    width: max-content;
+    border: none;
+    background-color: transparent;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: 0.02em;
+    color: #7b6ef6;
+    padding-left: 32px;
+    margin-top: auto;
+    text-decoration: none;
+}
+
+.add-favorite-button::before {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 0px;
+    background: center / contain no-repeat url('/icons/like.svg')
+}

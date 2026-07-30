@@ -1,0 +1,1 @@
+export const PREFIX = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/';
