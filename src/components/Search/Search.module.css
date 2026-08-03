@@ -1,0 +1,8 @@
+.search {
+    display: flex;
+    gap: 8px;
+}
+
+.search.column {
+    flex-direction: column;
+}

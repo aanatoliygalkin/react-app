@@ -1,0 +1,27 @@
+.button {
+    text-decoration: none;
+    cursor: pointer;
+    width: max-content;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #FFFFFF;
+    background-color: #7b6ef6;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    opacity: 1;
+    transition: opacity 0.25s;
+}
+
+.button:hover {
+    opacity: 0.75;
+}
+
+.button:disabled {
+    opacity: 0.5;
+}
+
+.button.active{
+    color: #fff;
+}
