@@ -11,23 +11,21 @@ import { useEffect } from 'react'
 function Layout() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { currentUser, users } = useAppSelector(state => state.user);
+    const { currentUser } = useAppSelector(state => state.user);
     
-    const favoritesCount = currentUser?.cart?.length ?? 0;
+    // Показываем бейдж только если пользователь авторизован
+    const favoritesCount = currentUser && currentUser.isLogined ? currentUser.cart?.length ?? 0 : 0;
+    const showBadge = currentUser && currentUser.isLogined && favoritesCount > 0;
 
     useEffect(() => {
         console.log('Layout: currentUser =', currentUser);
-        console.log('Layout: all users =', users);
-        console.log('Layout: isLogined =', currentUser?.isLogined);
-        console.log('Layout: cart length =', currentUser?.cart?.length);
-    }, [currentUser, users]);
+    }, [currentUser]);
 
     const handleLogout = () => {
         dispatch(userActions.logoutUser());
         navigate('/login');
     };
 
-    // Проверяем, действительно ли пользователь залогинен
     const isUserLoggedIn = currentUser !== null && currentUser.isLogined === true;
 
     return (
@@ -35,7 +33,11 @@ function Layout() {
             <Menu>
                 <MenuPanel>
                     <MenuButton to='/' text='Поиск фильмов' />
-                    <MenuButton badge={favoritesCount} to='/favorites' text='Мои фильмы' />
+                    <MenuButton 
+                        badge={showBadge ? favoritesCount : undefined} 
+                        to='/favorites' 
+                        text='Мои фильмы' 
+                    />
                     {isUserLoggedIn ? (
                         <>
                             <MenuButton text={currentUser.name} />
