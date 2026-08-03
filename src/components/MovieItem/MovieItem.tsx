@@ -1,23 +1,30 @@
+// src/components/MovieItem/MovieItem.tsx
 import { Link } from 'react-router-dom';
 import AddFavoriteButton from '../AddFavoriteButton/AddFavoriteButton';
 import styles from './MovieItem.module.css';
 import { MovieItemProps } from './MovieItem.props';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import { movieActions, movieItem } from '../../store/movie.slice';
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { userActions } from '../../store/user.slice';
 
-function MovieItem({ id, title, image, rating }: MovieItemProps) {
+function MovieItem({ id, title, image, rating, isFavorite = false }: MovieItemProps) {
     const imageUrl = image;
-    const dispatch = useDispatch();
-    const isFavorite = useSelector((state: RootState) =>
-        state.movie.items.some(item => item.id === id)
-    );
+    const dispatch = useAppDispatch();
+    const { currentUser } = useAppSelector(state => state.user);
+    
+    // Проверяем, есть ли фильм в избранном у текущего пользователя
+    const isFavoriteMovie = isFavorite || (currentUser?.cart.some(item => item.id === id) ?? false);
 
     const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
         e.preventDefault();
-        const movieData: movieItem = { id, title, image, rating };
-        dispatch(movieActions.toggleFavorite(movieData));
+        
+        if (!currentUser) {
+            alert('Пожалуйста, войдите в систему, чтобы добавлять фильмы в избранное');
+            return;
+        }
+        
+        const movieData = { id, title, image, rating };
+        dispatch(userActions.toggleFavorite(movieData));
     };
 
     return (
@@ -31,7 +38,7 @@ function MovieItem({ id, title, image, rating }: MovieItemProps) {
                 <div className={styles['movie-item-content']}>
                     <h2 className={styles['movie-item-h2']}>{title}</h2>
                 </div>
-                <AddFavoriteButton onClick={handleFavoriteClick} isFavorite={isFavorite} />
+                <AddFavoriteButton onClick={handleFavoriteClick} isFavorite={isFavoriteMovie} />
             </div>
         </Link>
     );

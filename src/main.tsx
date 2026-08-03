@@ -1,7 +1,7 @@
+// src/main.tsx
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { UserContextProvider } from './user.context'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
 import LoginPage from './pages/LoginPage/LoginPage'
@@ -14,14 +14,21 @@ import { RequireAuth } from './helpers/RequireAuth'
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 
+// Добавляем логирование состояния
+console.log('Initial store state:', store.getState());
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <UserContextProvider><Layout /></UserContextProvider>,
+    element: <Layout />,
     children: [
       {
         path: '/',
-        element: <RequireAuth><SearchMovies /></RequireAuth>
+        element: (
+          <RequireAuth>
+            <SearchMovies />
+          </RequireAuth>
+        )
       },
       {
         path: '/login',
@@ -29,11 +36,19 @@ const router = createBrowserRouter([
       },
       {
         path: '/favorites',
-        element: <RequireAuth><FavoritesPage /></RequireAuth>
+        element: (
+          <RequireAuth>
+            <FavoritesPage />
+          </RequireAuth>
+        )
       },
       {
         path: '/movie/:id',
-        element: <RequireAuth><MoviePage /></RequireAuth>,
+        element: (
+          <RequireAuth>
+            <MoviePage />
+          </RequireAuth>
+        ),
         loader: async ({ params }) => {
           const { data } = await axios.get(`${PREFIX}${params.id}`,
             {

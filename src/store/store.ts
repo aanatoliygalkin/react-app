@@ -1,16 +1,17 @@
+// src/store/STORE.ts
 import { configureStore } from "@reduxjs/toolkit";
-import { MOVIE_PERSISTENT_STATE, movieSlice } from "./movie.slice";
-import { saveState } from "./storage";
+import userReducer from "./user.slice";
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({
     reducer: {
-        movie: movieSlice.reducer
+        user: userReducer
     }
 });
 
-store.subscribe(()=>{
-    saveState(store.getState().movie, MOVIE_PERSISTENT_STATE);
-})
-
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+// Хуки прямо здесь - обратите внимание на export
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

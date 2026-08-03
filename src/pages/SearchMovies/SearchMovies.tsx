@@ -1,3 +1,4 @@
+// src/pages/SearchMovies/SearchMovies.tsx
 import Header from '../../components/Header/Header.js'
 import Search from '../../components/Search/Search.js'
 import MainInput from '../../components/MainInput/MainInput.js'
@@ -9,88 +10,18 @@ import { useState } from 'react';
 import axios from 'axios';
 import { PREFIX } from '../../helpers/PREFIX.js';
 import NoSearch from '../../components/NoSearch/NoSearch.js';
-
-export interface MovieProps {
-    filmId: number;           // В API это filmId, не id
-    nameRu: string;           // Русское название
-    nameEn: string;           // Английское название
-    posterUrl: string;        // Постер (большой)
-    posterUrlPreview: string; // Постер (маленький)
-    rating: string;           // Рейтинг
-    year: string;             // Год выпуска
-    description?: string;     // Описание (может отсутствовать)
-    genres: { genre: string }[]; // Массив жанров
-    countries: { country: string }[]; // Массив стран
-    type: string;             // FILM, TV_SERIES, VIDEO
-    filmLength: string;       // Длительность
-}
-
-export interface ApiResponse {
-    keyword: string;
-    pagesCount: number;
-    searchFilmsCountResult: number;
-    films: MovieProps[];
-}
+import { useAppSelector } from '../../store/store.js';
+import { MovieProps, ApiResponse } from '../../types/movie.types.js';
 
 function SearchMovies() {
-
-    // const movieData = [
-    //     {
-    //         id: 1,
-    //         title: 'Black Widow',
-    //         image: 'image1',
-    //         rating: '324'
-    //     },
-    //     {
-    //         id: 2,
-    //         title: 'Shang Chi',
-    //         image: 'image2',
-    //         rating: '124'
-    //     },
-    //     {
-    //         id: 3,
-    //         title: 'Loki',
-    //         image: 'image3',
-    //         rating: '235'
-    //     },
-    //     {
-    //         id: 4,
-    //         title: 'How I Met Your Mother',
-    //         image: 'image4',
-    //         rating: '235'
-    //     },
-    //     {
-    //         id: 5,
-    //         title: 'Money Heist',
-    //         image: 'image5',
-    //         rating: '8125'
-    //     },
-    //     {
-    //         id: 6,
-    //         title: 'Friends',
-    //         image: 'image6',
-    //         rating: '123'
-    //     },
-    //     {
-    //         id: 7,
-    //         title: 'The Big Bang Theory',
-    //         image: 'image7',
-    //         rating: '12'
-    //     },
-    //     {
-    //         id: 8,
-    //         title: 'Two And a Half Men',
-    //         image: 'image8',
-    //         rating: '456'
-    //     },
-    // ]
-
     const [movieData, setMovieData] = useState<MovieProps[]>([]);
-
     const [value, setValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>('');
     const [noSearch, setNoSearch] = useState<boolean>(false);
+    
+    const { currentUser } = useAppSelector(state => state.user);
+    const favoriteIds = currentUser?.cart.map(item => item.id) ?? [];
 
     const searchMovie = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -138,26 +69,41 @@ function SearchMovies() {
             <Header title={'Поиск'} />
             <Text align='left'>Попробуйте изменить запрос или ввести более точное название фильма</Text>
 
-            <form onSubmit={searchMovie} action="">
+            <form onSubmit={searchMovie}>
                 <Search>
-                    <MainInput value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)} placeholder={'Введите название'} />
+                    <MainInput 
+                        value={value} 
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)} 
+                        placeholder={'Введите название'} 
+                    />
                     {isLoading && <Button disabled={true} text='Ищем фильм...' />}
                     {!isLoading && <Button disabled={!value} type='submit' text='Искать' />}
                 </Search>
             </form>
+            
             <MovieList>
-                {movieData
-                    .map((movie) =>
+                {movieData.map((movie) => {
+                    const isFavorite = favoriteIds.includes(movie.filmId);
+                    
+                    return (
                         <MovieItem
                             key={movie.filmId}
                             id={movie.filmId}
                             title={movie.nameRu || movie.nameEn || 'Без названия'}
                             image={movie.posterUrlPreview || movie.posterUrl}
-                            rating={movie.rating || 'Нет рейтинга'} />
-                    )}
+                            rating={movie.rating || 'Нет рейтинга'}
+                            isFavorite={isFavorite}
+                        />
+                    );
+                })}
             </MovieList>
+            
             {error && <Header title={`ОШИБКА: ${error}`} />}
-            {noSearch && < NoSearch />}
+            {noSearch && <NoSearch />}
+            
+            {!currentUser && (
+                <Text align='center'>Войдите в систему, чтобы добавлять фильмы в избранное</Text>
+            )}
         </div>
     )
 }
